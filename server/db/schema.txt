@@ -1,0 +1,13 @@
+DROP KEYSPACE IF EXISTS datadump;
+
+CREATE KEYSPACE IF NOT EXISTS datadump with replication = {'class': 'SimpleStrategy', 'replication_factor':'1'};
+
+USE datadump;
+
+CREATE TABLE IF NOT EXISTS sensor_data (
+	id timeuuid,
+  uid text,
+  sensor text,
+  data map<text, text>,
+  PRIMARY KEY (uid, id)
+) WITH CLUSTERING ORDER BY (id DESC);

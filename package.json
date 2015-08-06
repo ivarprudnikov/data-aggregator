@@ -1,0 +1,45 @@
+{
+  "name": "data-aggregator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "lint": "./node_modules/.bin/jshint server.js server/*",
+    "pretest": "rm -rf coverage && npm run-script lint",
+    "test": "NODE_ENV=test ./node_modules/.bin/istanbul -v -x=server.js -x=client/** -x=server/conf/** --preload-sources cover ./node_modules/.bin/_mocha -- --recursive -R spec -r should",
+    "posttest": "./node_modules/.bin/istanbul check-coverage"
+  },
+  "author": "ivar.prudnikov@gmail.com",
+  "license": "GPL",
+  "engines": {
+    "node": ">=1.0",
+    "npm": "1.2.x"
+  },
+  "dependencies": {
+    "express": "4.x",
+    "serve-favicon": "*",
+    "body-parser": "*",
+    "compression": "*",
+    "method-override": "*",
+    "morgan": "*",
+    "serve-static": "*",
+    "ejs": "*",
+    "cassandra-driver": "2.0.*",
+    "underscore": "*",
+    "q": "~1.0.1",
+    "URIjs": "~1.*"
+  },
+
+  "devDependencies": {
+    "jshint": "*",
+    "jscs": "*",
+    "istanbul": "*",
+    "mocha": "*",
+    "should": "*",
+    "rewire": "*",
+    "supertest": "*",
+    "superagent": "*"
+  }
+}
+
