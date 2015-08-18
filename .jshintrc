@@ -26,7 +26,7 @@
   , "strict": false
   , "trailing": false
   , "undef": true
-  , "unused": true
+  , "unused": false
   , "globals": {
     "exports": true
   }

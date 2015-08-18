@@ -5,7 +5,7 @@
 var
 	router = require('express').Router(),
 	datasource = require('../db/datasource'),
-	TimeUuid = require('cassandra-driver').types.TimeUuid;
+	TimeUuid = require('cassandra-driver').types.TimeUuid
 	;
 
 router.post('/', function (req, res) {
@@ -23,7 +23,7 @@ router.post('/', function (req, res) {
 
 	datasource.getClient().then(function(client){
 
-		console.log("Query: %s Values: %o", query, itemData);
+		console.log('Query: %s Values: %o', query, itemData);
 
 		client.execute(query, itemData, {prepare: true}, function(err){
 			if(err) {

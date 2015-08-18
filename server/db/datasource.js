@@ -5,7 +5,7 @@ var config = require('../conf/config');
 var extend = require('../util/extend');
 var path = require('path');
 var fs = require('fs');
-var Q = require('q');
+var promise = require('q');
 
 /**
  * Cassandra driver wrapper
@@ -16,7 +16,9 @@ var Q = require('q');
  */
 function Cassandra(overrides){
 
-  if( ! this instanceof Cassandra ){
+  /* jshint maxcomplexity:10 */
+
+  if( !(this instanceof Cassandra) ){
     throw new Error('Must be called with `new` operator');
   }
 
@@ -62,17 +64,17 @@ function Cassandra(overrides){
 Cassandra.prototype._init = function(){
 
   var self = this;
-  var deferred = Q.defer();
+  var deferred = promise.defer();
 
   if(self._client || self._initializing){
-    throw new Error("Connection already present or in progress");
+    throw new Error('Connection already present or in progress');
   }
 
   self._executeSchemaQueries().then(function(){
 
     self._client = new cassandra.Client( self._clientOptions );
     self._client.on('log', function(level, className, message, furtherInfo) {
-      // console.log('log event: %s -- %s', level, message);
+       console.log('log event: %s -- %s', level, message);
     });
 
     /** optionally connect to Cassandra
@@ -98,7 +100,7 @@ Cassandra.prototype._init = function(){
  */
 Cassandra.prototype.getClient = function(){
 
-  var deferred = Q.defer();
+  var deferred = promise.defer();
   var self = this;
 
   if(self._client === null){
@@ -134,7 +136,7 @@ Cassandra.prototype.disconnect = function(cb){
 Cassandra.prototype._executeSchemaQueries = function(){
 
   var self = this;
-  var deferred = Q.defer();
+  var deferred = promise.defer();
   var schemaFile;
   var cass;
 
@@ -159,7 +161,7 @@ Cassandra.prototype._executeSchemaQueries = function(){
       var text = fs.readFileSync(schemaFile, {encoding: self.schemaEncoding});
 
       // remove new lines
-      var trimmed_text = text.replace(/(\r\n|\n|\r)/gm,"");
+      var trimmed_text = text.replace(/(\r\n|\n|\r)/gm,'');
 
       // split queries as does not work when batched
       var queries = trimmed_text.split(';');
@@ -190,14 +192,14 @@ Cassandra.prototype._executeManyWithClient = function(queries, client){
   queries.forEach(function(query,idx){
 
     if(!query || !query.trim()){
-      return Q(function(){ return true; });
+      return promise(function(){ return true; });
     }
 
     var fn = function(){
 
-      var deferred = Q.defer();
+      var deferred = promise.defer();
 
-      console.log("executing query", query)
+      console.log('executing query', query);
 
       client.execute( query, null, null, function(err, res){
         if(err){
@@ -214,7 +216,7 @@ Cassandra.prototype._executeManyWithClient = function(queries, client){
   });
 
 
-  var result = Q(function(){
+  var result = promise(function(){
     return true;
   });
 
