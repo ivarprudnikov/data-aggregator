@@ -8,7 +8,11 @@ This server app is stateless - there is no session.
 
 ### Datasource
 
-Application datasource is Cassandra.
+Application connects to configured Cassandra cluster, which is expected to be on localhost (127.0.0.1) unless 
+additional configuration is supplied.
+
+After app is started, it will connect to Cassandra and will execute `cql` script file that sets up keyspace and 
+column families (tables).
 
 ## Running the app
 
@@ -21,7 +25,8 @@ Application datasource is Cassandra.
 
 - ensure you are in project dir
 - ensure `cassandra` is running, by default it is expected to run locally
-- run `npm install && npm start`
+- run `npm install` to install dependencies
+- run `npm start` to start the app
 
 ### Environmental variables - config
 
@@ -39,7 +44,11 @@ subsequent variable will expect this prefix.
 - `APP_DB_PASSWORD`
 - `APP_DB_COLLECTION_PREFIX` - collections stored in mongo will have this prefix
 
+For additional variables (change in time) look into `server/conf/config.js`
+
 ### Testing
 
-not fixed yet
+- ensure you are in project dir
+- run `npm install` to install dependencies
+- run `npm test` to test the app
 
