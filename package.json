@@ -1,7 +1,8 @@
 {
   "name": "data-aggregator",
+  "private": false,
   "version": "0.0.1",
-  "description": "",
+  "description": "Network app that exposes HTTP API endpoints which accept data payloads that are stored in Cassandra",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
