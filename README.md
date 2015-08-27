@@ -39,10 +39,11 @@ subsequent variable will expect this prefix.
 - `APP_PROTOCOL` - http(default)
 - `APP_FQDN` - localhost(default)
 - `APP_PORT` - 8080(default)
-- `APP_DB_URI`
-- `APP_DB_USER`
-- `APP_DB_PASSWORD`
-- `APP_DB_COLLECTION_PREFIX` - collections stored in mongo will have this prefix
+- `APP_DB_CONTACT_POINTS` - 127.0.0.1(default), multiple can be joined via comma(,)
+- `APP_DB_KEYSPACE` - datadump(default), test_datadump(default in test env) - will be used when creating cass client instance
+- `APP_DB_SCHEMA` - schema.txt(default), test_schema.txt(default in test env) - file name expected to be in `server/db`
+which will be used by naked client against cassandra as list of commands.
+- `APP_DB_PROTOCOL` - null(default) which falls back to 9200 in client module.
 
 For additional variables (change in time) look into `server/conf/config.js`
 
