@@ -27,7 +27,7 @@ router.post('/', function (req, res) {
 
 		client.execute(query, itemData, {prepare: true}, function(err){
 			if(err) {
-				return res.status(400).send({errors: [err]});
+				return res.status(400).send({errors: ['Could not store data']});
 			} else {
 				res.status(201).send({data:itemData});
 			}

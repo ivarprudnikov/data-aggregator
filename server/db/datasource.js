@@ -70,29 +70,30 @@ Cassandra.prototype._init = function(){
     throw new Error('Connection already present or in progress');
   }
 
-  self._executeSchemaQueries().then(function(){
+  self._initializing = self._executeSchemaQueries().then(function(){
 
     self._client = new cassandra.Client( self._clientOptions );
     self._client.on('log', function(level, className, message, furtherInfo) {
-       console.log('log event: %s -- %s', level, message);
+      console.log('log event: %s -- %s', level, message);
     });
 
-    /** optionally connect to Cassandra
-     *  although when querying this method is
-     *  invoked internally all the time
-     */
-    self._client.connect(function(err, result) {
-      if(err){
-        throw new Error('Could not connect to Cassandra', err);
-      }
-      console.log('[%d] Connected to cassandra',process.pid, 'to keyspace', self._clientOptions.keyspace);
-
-      deferred.resolve();
-    });
-
+    checkConnectionAndResolve();
   });
 
-  self._initializing = deferred.promise;
+  function checkConnectionAndResolve(){
+    self._client.connect(function(err, result) {
+      if(err){
+        console.log('connection failed, will retry in 5s');
+        setTimeout(function(){
+          checkConnectionAndResolve.call(this);
+        },5000);
+      } else {
+        console.log('[%d] Connected to cassandra',process.pid, 'to keyspace', self._clientOptions.keyspace);
+        deferred.resolve();
+      }
+    });
+  }
+
 };
 
 /**
@@ -151,31 +152,40 @@ Cassandra.prototype._executeSchemaQueries = function(){
       keyspace: null
     });
 
-    cass.connect(function(err, result) {
-      if(err){
-        throw new Error('Could not connect to Cassandra', err);
-      }
-      console.log('Executing commands from', schemaFile);
-
-      // parse contents
-      var text = fs.readFileSync(schemaFile, {encoding: self.schemaEncoding});
-
-      // remove new lines
-      var trimmed_text = text.replace(/(\r\n|\n|\r)/gm,'');
-
-      // split queries as does not work when batched
-      var queries = trimmed_text.split(';');
-
-      self._executeManyWithClient(queries,cass).then(function(){
-        cass.shutdown(function(){
-          deferred.resolve();
-        });
-      }).done();
-
-    });
+    connectAndExecute();
 
   } else {
     deferred.resolve();
+  }
+
+  function connectAndExecute(){
+    cass.connect(function(err, result) {
+      if(err){
+        console.log('connection failed, will retry in 5s');
+
+        setTimeout(function(){
+          connectAndExecute.call(this);
+        },5000);
+
+      } else {
+        console.log('Executing commands from', schemaFile);
+
+        // parse contents
+        var text = fs.readFileSync(schemaFile, {encoding: self.schemaEncoding});
+
+        // remove new lines
+        var trimmed_text = text.replace(/(\r\n|\n|\r)/gm,'');
+
+        // split queries as does not work when batched
+        var queries = trimmed_text.split(';');
+
+        self._executeManyWithClient(queries,cass).then(function(){
+          cass.shutdown(function(){
+            deferred.resolve();
+          });
+        }).done();
+      }
+    });
   }
 
   return deferred.promise;
