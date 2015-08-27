@@ -1,6 +1,23 @@
 # Data aggregator
 
-Network application for data aggregation via HTTP REST based API endpoints.
+Network application for data aggregation via HTTP REST based API endpoints and its storage in Cassandra.
+
+## API
+
+`api/v1/sensor` - `POST` - Payload will be stored in database, eg:
+
+```
+{
+  "uid": "12345",
+  "sensor": "arduinoBot",
+  "data": {
+    "temp": 19,
+    "speed": 2,
+    "battery": "67",
+    "turnedOn": "2015-08-27T22:53:11.940Z"
+  }
+}
+```
 
 ## Internals
 
