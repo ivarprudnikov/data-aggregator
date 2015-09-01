@@ -9,7 +9,7 @@ var express = require('express'),
 	path = require('path'),
 
 	config = require('./server/conf/config'),
-	mappings = require('./server/conf/mappings'),
+	mappings = require('./server/routes/mappings'),
 	datasource = require('./server/db/datasource')
 	;
 

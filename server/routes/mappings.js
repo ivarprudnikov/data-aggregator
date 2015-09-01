@@ -1,7 +1,7 @@
 'use strict';
 
-var cfg = require('./config');
-var RouteErrors = require('../routes/RouteErrorsService');
+var cfg = require('../conf/config');
+var RouteErrors = require('./RouteErrorsService');
 
 exports.init = function (app) {
 
@@ -18,7 +18,7 @@ exports.init = function (app) {
   /**
    * Define all routes, register routers
    */
-  app.use(cfg.routes.api.versionRoot + '/sensor', require('../routes/sensor'));
+  app.use(cfg.routes.api.versionRoot + '/sensor', require('./sensor'));
 
   /**
    * 404 errors, unhandled routes
