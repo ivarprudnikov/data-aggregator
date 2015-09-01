@@ -1,0 +1,10 @@
+branch-defaults:
+  master:
+    environment: data-aggregator-prod
+global:
+  application_name: data-aggregator
+  default_ec2_keyname: null
+  default_platform: Node.js
+  default_region: eu-west-1
+  profile: null
+  sc: git
