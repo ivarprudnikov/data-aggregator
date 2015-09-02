@@ -1,5 +1,3 @@
-DROP KEYSPACE IF EXISTS datadump;
-
 CREATE KEYSPACE IF NOT EXISTS datadump with replication = {'class': 'SimpleStrategy', 'replication_factor':'1'};
 
 USE datadump;
