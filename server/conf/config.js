@@ -10,7 +10,7 @@ var appEnvVarPrefix = (process.env.APP_ENV_VAR_PREFIX || 'APP_');
 var appName = (envVar('NAME') || 'datadump');
 var protocol = (envVar('PROTOCOL') || 'http');
 var fqdn = (envVar('FQDN') || 'localhost');
-var port = (envVar('PORT') || '8080');
+var port = (envVar('PORT') || process.env.PORT || '8080');
 
 // database
 var dbContactPoints;
