@@ -20,20 +20,8 @@ if(_dbContactPoints.indexOf(',')){
 } else {
   dbContactPoints = [_dbContactPoints];
 }
-var _dbKeyspaceDefault = 'datadump';
-if(environment === 'test'){
-  _dbKeyspaceDefault = 'test_datadump';
-}
-var dbKeyspace = (envVar('DB_KEYSPACE') || _dbKeyspaceDefault);
-
-var _dbSchemaDefault = null;
-if(environment === 'test'){
-	_dbSchemaDefault = 'test_schema.txt';
-} else if(environment === 'development'){
-	_dbSchemaDefault = 'schema.txt';
-}
-var dbSchema = (envVar('DB_SCHEMA') || _dbSchemaDefault);
-
+var dbKeyspace = (envVar('DB_KEYSPACE') || 'datadump');
+var dbSchema = (envVar('DB_SCHEMA') || 'schema.txt');
 var dbProtocol = (envVar('DB_PROTOCOL') || null);
 
 
